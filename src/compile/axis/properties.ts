@@ -278,7 +278,7 @@ export function defaultLabelOverlap(type: Type, scaleType: ScaleType, hasTimeUni
 }
 
 export function defaultOrient(channel: PositionScaleChannel) {
-  return channel === 'x' ? 'bottom' : 'left';
+  return channel === 'x' ? 'bottom' : channel === 'y' ? 'left' : "back";
 }
 
 export function defaultTickCount({

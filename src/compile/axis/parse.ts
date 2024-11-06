@@ -232,7 +232,7 @@ function parseAxis(channel: PositionScaleChannel, model: UnitModel): AxisCompone
 
   const orient =
     axis?.orient ||
-    config[channel === 'x' ? 'axisX' : 'axisY']?.orient ||
+    config[channel === 'x' ? 'axisX' : channel === 'y' ? 'axisY' : 'axisZ']?.orient ||
     config.axis?.orient ||
     defaultOrient(channel);
 

@@ -346,7 +346,8 @@ export type AxisConfig<ES extends ExprRef | SignalRef> = Guide &
   };
 
 export interface Axis<ES extends ExprRef | SignalRef = ExprRef | SignalRef>
-  extends AxisConfigBaseWithConditionalAndSignal<ES>, Guide {
+  extends AxisConfigBaseWithConditionalAndSignal<ES>,
+    Guide {
   /**
    * Mark definitions for custom axis encoding.
    *
@@ -592,6 +593,11 @@ export interface AxisConfigMixins<ES extends ExprRef | SignalRef = ExprRef | Sig
   axisY?: AxisConfig<ES>;
 
   /**
+   * Z-axis specific config.
+   */
+  axisZ?: AxisConfig<ES>;
+
+  /**
    * Config for y-axis along the left edge of the chart.
    */
   axisLeft?: AxisConfig<ES>;
@@ -685,6 +691,31 @@ export interface AxisConfigMixins<ES extends ExprRef | SignalRef = ExprRef | Sig
    * Config for y-temporal axes.
    */
   axisYTemporal?: AxisConfig<ES>;
+
+  /**
+   * Config for z-axes with "band" scales.
+   */
+  axisZBand?: AxisConfig<ES>;
+
+  /**
+   * Config for z-axes with "point" scales.
+   */
+  axisZPoint?: AxisConfig<ES>;
+
+  /**
+   * Config for z-axes with "point" or "band" scales.
+   */
+  axisZDiscrete?: AxisConfig<ES>;
+
+  /**
+   * Config for z-quantitative axes.
+   */
+  axisZQuantitative?: AxisConfig<ES>;
+
+  /**
+   * Config for z-temporal axes.
+   */
+  axisZTemporal?: AxisConfig<ES>;
 }
 
 const AXIS_CONFIGS_INDEX: Flag<keyof AxisConfigMixins<any>> = {
@@ -710,6 +741,12 @@ const AXIS_CONFIGS_INDEX: Flag<keyof AxisConfigMixins<any>> = {
   axisYPoint: 1,
   axisYQuantitative: 1,
   axisYTemporal: 1,
+  axisZ: 1,
+  axisZBand: 1,
+  axisZDiscrete: 1,
+  axisZPoint: 1,
+  axisZQuantitative: 1,
+  axisZTemporal: 1,
 };
 
 export const AXIS_CONFIGS = keys(AXIS_CONFIGS_INDEX);

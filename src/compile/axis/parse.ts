@@ -29,12 +29,14 @@ const OPPOSITE_ORIENT: Record<AxisOrient, AxisOrient> = {
   bottom: 'top',
   top: 'bottom',
   left: 'right',
-  right: 'left'
+  right: 'left',
+  front: 'front',
+  back: 'back'
 };
 
 export function parseLayerAxes(model: LayerModel) {
   const {axes, resolve} = model.component;
-  const axisCount: Record<AxisOrient, number> = {top: 0, bottom: 0, right: 0, left: 0};
+  const axisCount: Record<AxisOrient, number> = {top: 0, bottom: 0, right: 0, left: 0, front: 0, back: 0};
 
   for (const child of model.children) {
     child.parseAxesAndHeaders();

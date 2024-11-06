@@ -79,7 +79,7 @@ export const axisRules: {
   orient: ({orient}) => orient as AxisOrient, // Need to cast until Vega supports signal
 
   tickCount: ({channel, model, axis, fieldOrDatumDef, scaleType}) => {
-    const sizeType = channel === 'x' ? 'width' : channel === 'y' ? 'height' : undefined;
+    const sizeType = channel === 'x' ? 'width' : channel === 'y' ? 'height' : channel === 'z' ? 'depth' : undefined;
     const size = sizeType ? model.getSizeSignalRef(sizeType) : undefined;
     return axis.tickCount ?? defaultTickCount({fieldOrDatumDef, scaleType, size, values: axis.values});
   },
@@ -166,7 +166,7 @@ export function normalizeAngleExpr(angle: SignalRef) {
 export function defaultLabelBaseline(
   angle: number | SignalRef,
   orient: AxisOrient | SignalRef,
-  channel: 'x' | 'y',
+  channel: 'x' | 'y' | 'z',
   alwaysIncludeMiddle?: boolean
 ) {
   if (angle !== undefined) {
@@ -219,7 +219,7 @@ export function defaultLabelBaseline(
 export function defaultLabelAlign(
   angle: number | SignalRef,
   orient: AxisOrient | SignalRef,
-  channel: 'x' | 'y'
+  channel: 'x' | 'y' | 'z'
 ): Align | SignalRef {
   if (angle === undefined) {
     return undefined;
@@ -330,7 +330,7 @@ export function defaultTickMinStep({format, fieldOrDatumDef}: Pick<AxisRuleParam
   return undefined;
 }
 
-export function getFieldDefTitle(model: UnitModel, channel: 'x' | 'y') {
+export function getFieldDefTitle(model: UnitModel, channel: 'x' | 'y' | 'z') {
   const channel2 = channel === 'x' ? 'x2' : 'y2';
   const fieldDef = model.fieldDef(channel);
   const fieldDef2 = model.fieldDef(channel2);

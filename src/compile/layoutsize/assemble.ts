@@ -12,13 +12,15 @@ export function assembleLayoutSignals(model: Model): NewSignal[] {
   return [
     ...sizeSignals(model, 'width'),
     ...sizeSignals(model, 'height'),
+    ...sizeSignals(model, 'depth'),
     ...sizeSignals(model, 'childWidth'),
-    ...sizeSignals(model, 'childHeight')
+    ...sizeSignals(model, 'childHeight'),
+    ...sizeSignals(model, 'childDepth')
   ];
 }
 
 export function sizeSignals(model: Model, sizeType: LayoutSizeType): (NewSignal | InitSignal)[] {
-  const channel = sizeType === 'width' ? 'x' : 'y';
+  const channel = sizeType === 'width' ? 'x' : sizeType === 'height' ? 'y' : 'z';
   const size = model.component.layoutSize.get(sizeType);
   if (!size || size === 'merged') {
     return [];

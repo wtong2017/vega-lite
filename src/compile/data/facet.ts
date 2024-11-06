@@ -18,6 +18,7 @@ import {DataFlowNode} from './dataflow';
 interface ChildIndependentFieldsWithStep {
   x?: string;
   y?: string;
+  z?: string;
 }
 
 interface FacetChannelInfo {

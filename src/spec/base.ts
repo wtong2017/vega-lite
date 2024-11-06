@@ -112,6 +112,8 @@ export interface LayoutSizeMixins {
    * __See also:__ [`height`](https://vega.github.io/vega-lite/docs/size.html) documentation.
    */
   height?: number | 'container' | Step; // Vega also supports SignalRef for width and height. However, we need to know if width is a step or not in VL and it's very difficult to check this at runtime, so we intentionally do not support SignalRef here.
+
+  depth?: number | 'container' | Step;
 }
 
 export function isFrameMixins(o: any): o is FrameMixins<any> {

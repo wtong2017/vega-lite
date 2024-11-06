@@ -168,6 +168,8 @@ export interface MarkConfig<ES extends ExprRef | SignalRef>
    */
   y?: number | 'height' | ES; // Vega doesn't have 'height'
 
+  z?: number | 'depth' | ES;
+
   /**
    * X2 coordinates for ranged `"area"`, `"bar"`, `"rect"`, and  `"rule"`.
    *
@@ -181,6 +183,8 @@ export interface MarkConfig<ES extends ExprRef | SignalRef>
    * The `value` of this channel can be a number or a string `"height"` for the height of the plot.
    */
   y2?: number | 'height' | ES; // Vega doesn't have 'height'
+
+  z2?: number | 'depth' | ES;
 
   /**
    * Default fill color. This property has higher precedence than `config.color`. Set to `null` to remove fill.
@@ -579,6 +583,10 @@ export interface MarkDefMixins<ES extends ExprRef | SignalRef> {
    */
   y2Offset?: number | ES;
 
+  zOffset?: number | ES;
+
+  z2Offset?: number | ES;
+
   /**
    * Offset for theta.
    */
@@ -616,7 +624,7 @@ export interface MarkDef<M extends string | Mark = Mark, ES extends ExprRef | Si
         BarConfig<ES> & // always extends RectConfig
         LineConfig<ES> &
         TickConfig<ES>,
-      'startAngle' | 'endAngle' | 'width' | 'height'
+      'startAngle' | 'endAngle' | 'width' | 'height' | 'depth'
     >,
     MarkDefMixins<ES> {
   // Omit startAngle/endAngle since we use theta/theta2 from Vega-Lite schema to avoid confusion
@@ -650,6 +658,8 @@ export interface MarkDef<M extends string | Mark = Mark, ES extends ExprRef | Si
    * - A relative band size definition.  For example, `{band: 0.5}` represents half of the band
    */
   height?: number | ES | RelativeBandSize;
+
+  depth?: number | ES | RelativeBandSize;
 }
 
 const DEFAULT_RECT_BAND_SIZE = 5;

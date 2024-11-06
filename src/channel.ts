@@ -22,12 +22,16 @@ export const FACET = 'facet' as const;
 // Position
 export const X = 'x' as const;
 export const Y = 'y' as const;
+export const Z = 'z' as const;
 export const X2 = 'x2' as const;
 export const Y2 = 'y2' as const;
+export const Z2 = 'z2' as const;
 
 // Position Offset
 export const XOFFSET = 'xOffset' as const;
 export const YOFFSET = 'yOffset' as const;
+
+export const ZOFFSET = 'zOffset' as const;
 
 // Arc-Position
 export const RADIUS = 'radius' as const;
@@ -76,8 +80,10 @@ export const DESCRIPTION = 'description' as const;
 const POSITION_CHANNEL_INDEX = {
   x: 1,
   y: 1,
+  z: 1,
   x2: 1,
-  y2: 1
+  y2: 1,
+  z2: 1
 } as const;
 
 export type PositionChannel = keyof typeof POSITION_CHANNEL_INDEX;
@@ -130,6 +136,7 @@ const UNIT_CHANNEL_INDEX: Flag<Channel> = {
   ...GEO_POSIITON_CHANNEL_INDEX,
   xOffset: 1,
   yOffset: 1,
+  zOffset: 1,
 
   // color
   color: 1,
@@ -208,7 +215,7 @@ export function isChannel(str: string): str is Channel {
   return hasOwnProperty(CHANNEL_INDEX, str);
 }
 
-export type SecondaryRangeChannel = 'x2' | 'y2' | 'latitude2' | 'longitude2' | 'theta2' | 'radius2';
+export type SecondaryRangeChannel = 'x2' | 'y2' | 'z2' | 'latitude2' | 'longitude2' | 'theta2' | 'radius2';
 
 export const SECONDARY_RANGE_CHANNEL: SecondaryRangeChannel[] = [X2, Y2, LATITUDE2, LONGITUDE2, THETA2, RADIUS2];
 
@@ -221,15 +228,17 @@ export type MainChannelOf<C extends ExtendedChannel> = C extends 'x2'
   ? 'x'
   : C extends 'y2'
     ? 'y'
-    : C extends 'latitude2'
-      ? 'latitude'
-      : C extends 'longitude2'
-        ? 'longitude'
-        : C extends 'theta2'
-          ? 'theta'
-          : C extends 'radius2'
-            ? 'radius'
-            : C;
+    : C extends 'z2'
+      ? 'z'
+      : C extends 'latitude2'
+        ? 'latitude'
+        : C extends 'longitude2'
+          ? 'longitude'
+          : C extends 'theta2'
+            ? 'theta'
+            : C extends 'radius2'
+              ? 'radius'
+              : C;
 
 /**
  * Get the main channel for a range channel. E.g. `x` for `x2`.
@@ -240,6 +249,8 @@ export function getMainRangeChannel<C extends ExtendedChannel>(channel: C): Main
       return X as MainChannelOf<C>;
     case Y2:
       return Y as MainChannelOf<C>;
+    case Z2:
+      return Z as MainChannelOf<C>;
     case LATITUDE2:
       return LATITUDE as MainChannelOf<C>;
     case LONGITUDE2:
@@ -303,9 +314,9 @@ export function getSecondaryRangeChannel<C extends Channel>(channel: C): Seconda
   return undefined;
 }
 
-export function getSizeChannel(channel: PositionChannel): 'width' | 'height';
-export function getSizeChannel(channel: Channel): 'width' | 'height' | undefined;
-export function getSizeChannel(channel: Channel): 'width' | 'height' | undefined {
+export function getSizeChannel(channel: PositionChannel): 'width' | 'height' | 'depth';
+export function getSizeChannel(channel: Channel): 'width' | 'height' | 'depth' | undefined;
+export function getSizeChannel(channel: Channel): 'width' | 'height' | 'depth' | undefined {
   switch (channel) {
     case X:
     case X2:
@@ -313,6 +324,9 @@ export function getSizeChannel(channel: Channel): 'width' | 'height' | undefined
     case Y:
     case Y2:
       return 'height';
+    case Z:
+    case Z2:
+      return 'depth';
   }
   return undefined;
 }
@@ -351,6 +365,8 @@ export function getOffsetScaleChannel(channel: Channel): OffsetScaleChannel {
       return 'xOffset';
     case Y:
       return 'yOffset';
+    case Z:
+      return 'zOffset';
   }
   return undefined;
 }
@@ -361,6 +377,8 @@ export function getMainChannelFromOffsetChannel(channel: OffsetScaleChannel): Po
       return 'x';
     case 'yOffset':
       return 'y';
+    case 'zOffset':
+      return 'z';
   }
 }
 
@@ -371,12 +389,15 @@ export const UNIT_CHANNELS = keys(UNIT_CHANNEL_INDEX);
 const {
   x: _x,
   y: _y,
+  z: _z,
   // x2 and y2 share the same scale as x and y
   x2: _x2,
   y2: _y2,
+  z2: _z2,
   //
   xOffset: _xo,
   yOffset: _yo,
+  zOffset: _zo,
   latitude: _latitude,
   longitude: _longitude,
   latitude2: _latitude2,
@@ -394,7 +415,8 @@ export type NonPositionChannel = (typeof NONPOSITION_CHANNELS)[number];
 
 const POSITION_SCALE_CHANNEL_INDEX = {
   x: 1,
-  y: 1
+  y: 1,
+  z: 1
 } as const;
 export const POSITION_SCALE_CHANNELS = keys(POSITION_SCALE_CHANNEL_INDEX);
 export type PositionScaleChannel = keyof typeof POSITION_SCALE_CHANNEL_INDEX;
@@ -411,11 +433,11 @@ export const POLAR_POSITION_SCALE_CHANNEL_INDEX = {
 export const POLAR_POSITION_SCALE_CHANNELS = keys(POLAR_POSITION_SCALE_CHANNEL_INDEX);
 export type PolarPositionScaleChannel = keyof typeof POLAR_POSITION_SCALE_CHANNEL_INDEX;
 
-export function getPositionScaleChannel(sizeType: 'width' | 'height'): PositionScaleChannel {
-  return sizeType === 'width' ? X : Y;
+export function getPositionScaleChannel(sizeType: 'width' | 'height' | 'depth'): PositionScaleChannel {
+  return sizeType === 'width' ? X : sizeType === 'height' ? Y : Z;
 }
 
-const OFFSET_SCALE_CHANNEL_INDEX: {xOffset: 1; yOffset: 1} = {xOffset: 1, yOffset: 1};
+const OFFSET_SCALE_CHANNEL_INDEX: {xOffset: 1; yOffset: 1; zOffset: 1} = {xOffset: 1, yOffset: 1, zOffset: 1};
 
 export const OFFSET_SCALE_CHANNELS = keys(OFFSET_SCALE_CHANNEL_INDEX);
 
@@ -548,14 +570,17 @@ function getSupportedMark(channel: ExtendedChannel): SupportedMark {
       return ALL_MARKS;
     case X:
     case Y:
+    case Z:
     case XOFFSET:
     case YOFFSET:
+    case ZOFFSET:
     case LATITUDE:
     case LONGITUDE:
       // all marks except geoshape. geoshape does not use X, Y -- it uses a projection
       return ALL_MARKS_EXCEPT_GEOSHAPE;
     case X2:
     case Y2:
+    case Z2:
     case LATITUDE2:
     case LONGITUDE2:
       return {
@@ -616,10 +641,12 @@ export function rangeType(channel: ExtendedChannel): RangeType {
   switch (channel) {
     case X:
     case Y:
+    case Z:
     case THETA:
     case RADIUS:
     case XOFFSET:
     case YOFFSET:
+    case ZOFFSET:
     case SIZE:
     case ANGLE:
     case STROKEWIDTH:
@@ -630,6 +657,7 @@ export function rangeType(channel: ExtendedChannel): RangeType {
     // X2 and Y2 use X and Y scales, so they similarly have continuous range. [falls through]
     case X2:
     case Y2:
+    case Z2:
     case THETA2:
     case RADIUS2:
       return undefined;

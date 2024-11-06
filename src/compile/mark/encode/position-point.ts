@@ -23,14 +23,14 @@ import {scaledZeroOrMinOrMax, ScaledZeroOrMinOrMaxProps} from './scaledZeroOrMin
  * Return encode for point (non-band) position channels.
  */
 export function pointPosition(
-  channel: 'x' | 'y' | 'theta' | 'radius',
+  channel: 'x' | 'y' | 'z' | 'theta' | 'radius',
   model: UnitModel,
   {
     defaultPos,
     vgChannel
   }: {
     defaultPos: 'mid' | 'zeroOrMin' | 'zeroOrMax' | null;
-    vgChannel?: 'x' | 'y' | 'xc' | 'yc';
+    vgChannel?: 'x' | 'y' | 'z' | 'xc' | 'yc' | 'zc';
   }
 ) {
   const {encoding, markDef, config, stack} = model;
@@ -86,7 +86,7 @@ export function pointPosition(
  */
 export function positionRef(
   params: ref.MidPointParams & {
-    channel: 'x' | 'y' | 'radius' | 'theta';
+    channel: 'x' | 'y' | 'z' | 'radius' | 'theta';
   }
 ): VgValueRef | VgValueRef[] {
   const {channel, channelDef, scaleName, stack, offset, markDef} = params;
@@ -195,5 +195,7 @@ function zeroOrMinOrMaxPosition({
       return mode === 'zeroOrMin' ? {value: 0} : {field: {group: 'width'}};
     case 'y':
       return mode === 'zeroOrMin' ? {field: {group: 'height'}} : {value: 0};
+    case 'z':
+      return mode === 'zeroOrMin' ? {value: 0} : {field: {group: 'depth'}};
   }
 }

@@ -47,7 +47,10 @@ import {
   XOFFSET,
   Y,
   Y2,
-  YOFFSET
+  YOFFSET,
+  Z,
+  Z2,
+  ZOFFSET
 } from './channel';
 import {getMarkConfig, getMarkPropOrConfig} from './compile/common';
 import {isCustomFormatType} from './compile/format';
@@ -1265,8 +1268,10 @@ export function channelCompatibility(
 
     case X:
     case Y:
+    case Z:
     case XOFFSET:
     case YOFFSET:
+    case ZOFFSET:
     case COLOR:
     case FILL:
     case STROKE:
@@ -1303,6 +1308,7 @@ export function channelCompatibility(
     case RADIUS2:
     case X2:
     case Y2:
+    case Z2:
       if (type === 'nominal' && !(fieldDef as any)['sort']) {
         return {
           compatible: false,

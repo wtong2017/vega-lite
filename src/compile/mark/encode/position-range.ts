@@ -35,7 +35,7 @@ export function pointOrRangePosition(
 }
 
 export function rangePosition(
-  channel: 'x' | 'y' | 'theta' | 'radius',
+  channel: 'x' | 'y' | 'z' | 'theta' | 'radius',
   model: UnitModel,
   {
     defaultPos,
@@ -179,7 +179,7 @@ export function position2Ref({
 }
 
 function position2orSize(
-  channel: 'x2' | 'y2' | 'radius2' | 'theta2',
+  channel: 'x2' | 'y2' | 'z2' | 'radius2' | 'theta2',
   markDef: MarkConfig<SignalRef> | MarkDef<Mark, SignalRef>
 ) {
   const sizeChannel = getSizeChannel(channel);

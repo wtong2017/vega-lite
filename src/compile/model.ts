@@ -247,6 +247,10 @@ export abstract class Model {
     return this.getSizeSignalRef('height');
   }
 
+  public get depth(): SignalRef {
+    return this.getSizeSignalRef('depth');
+  }
+
   public parse() {
     this.parseScale();
 
@@ -286,6 +290,9 @@ export abstract class Model {
     }
     if (this.getName('height') !== 'height') {
       this.renameSignal(this.getName('height'), 'height');
+    }
+    if (this.getName('depth') !== 'depth') {
+      this.renameSignal(this.getName('depth'), 'depth');
     }
   }
 
@@ -337,6 +344,7 @@ export abstract class Model {
         return {
           width: this.getSizeSignalRef('width'),
           height: this.getSizeSignalRef('height'),
+          depth: this.getSizeSignalRef('depth'),
           ...encodeEntry
         };
       }

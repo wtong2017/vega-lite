@@ -227,11 +227,13 @@ export function assembleAxisSignals(model: Model): NewSignal[] {
 }
 
 export function assembleAxes(axisComponents: AxisComponentIndex, config: Config<SignalRef>): VgAxis[] {
-  const {x = [], y = []} = axisComponents;
+  const {x = [], y = [], z = []} = axisComponents;
   return [
     ...x.map(a => assembleAxis(a, 'grid', config)),
     ...y.map(a => assembleAxis(a, 'grid', config)),
+    ...z.map(a => assembleAxis(a, 'grid', config)),
     ...x.map(a => assembleAxis(a, 'main', config)),
-    ...y.map(a => assembleAxis(a, 'main', config))
+    ...y.map(a => assembleAxis(a, 'main', config)),
+    ...z.map(a => assembleAxis(a, 'main', config))
   ].filter(a => a); // filter undefined
 }

@@ -46,7 +46,10 @@ import {
   XOFFSET,
   Y,
   Y2,
-  YOFFSET
+  YOFFSET,
+  Z,
+  Z2,
+  ZOFFSET
 } from './channel';
 import {
   binRequiresRange,
@@ -112,6 +115,8 @@ export interface Encoding<F extends Field> {
    */
   y?: PositionDef<F>;
 
+  z?: PositionDef<F>;
+
   /**
    * Offset of x-position of the marks
    */
@@ -121,6 +126,8 @@ export interface Encoding<F extends Field> {
    * Offset of y-position of the marks
    */
   yOffset?: OffsetDef<F>;
+
+  zOffset?: OffsetDef<F>;
 
   /**
    * X2 coordinates for ranged `"area"`, `"bar"`, `"rect"`, and  `"rule"`.
@@ -139,6 +146,8 @@ export interface Encoding<F extends Field> {
   // TODO: Ham need to add default behavior
   // `y2` cannot have type as it should have the same type as `y`
   y2?: Position2Def<F>;
+
+  z2?: Position2Def<F>;
 
   /**
    * Longitude position of geographically projected marks.
@@ -718,13 +727,16 @@ export function pathGroupingFields(mark: Mark, encoding: Encoding<string>): stri
       // x, y, x2, y2, lat, long, lat1, long2, order, tooltip, href, aria label, cursor should not cause lines to group
       case X:
       case Y:
+      case Z:
       case HREF:
       case DESCRIPTION:
       case URL:
       case X2:
       case Y2:
+      case Z2:
       case XOFFSET:
       case YOFFSET:
+      case ZOFFSET:
       case THETA:
       case THETA2:
       case RADIUS:

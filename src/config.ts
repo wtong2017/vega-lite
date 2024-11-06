@@ -57,6 +57,10 @@ export interface ViewConfig<ES extends ExprRef | SignalRef> extends BaseViewBack
    */
   discreteHeight?: number | {step: number};
 
+  continuousDepth?: number;
+
+  discreteDepth?: number | {step: number};
+
   /**
    * Default step size for x-/y- discrete fields.
    */
@@ -70,14 +74,17 @@ export interface ViewConfig<ES extends ExprRef | SignalRef> extends BaseViewBack
 
 export function getViewConfigContinuousSize<ES extends ExprRef | SignalRef>(
   viewConfig: ViewConfig<ES>,
-  channel: 'width' | 'height'
+  channel: 'width' | 'height' | 'depth'
 ) {
-  return (viewConfig as any)[channel] ?? viewConfig[channel === 'width' ? 'continuousWidth' : 'continuousHeight']; // get width/height for backwards compatibility
+  return (
+    (viewConfig as any)[channel] ??
+    viewConfig[channel === 'width' ? 'continuousWidth' : channel === 'height' ? 'continuousHeight' : 'continuousDepth']
+  ); // get width/height for backwards compatibility
 }
 
 export function getViewConfigDiscreteStep<ES extends ExprRef | SignalRef>(
   viewConfig: ViewConfig<ES>,
-  channel: 'width' | 'height'
+  channel: 'width' | 'height' | 'depth'
 ) {
   const size = getViewConfigDiscreteSize(viewConfig, channel);
   return isStep(size) ? size.step : DEFAULT_STEP;
@@ -85,9 +92,11 @@ export function getViewConfigDiscreteStep<ES extends ExprRef | SignalRef>(
 
 export function getViewConfigDiscreteSize<ES extends ExprRef | SignalRef>(
   viewConfig: ViewConfig<ES>,
-  channel: 'width' | 'height'
+  channel: 'width' | 'height' | 'depth'
 ) {
-  const size = (viewConfig as any)[channel] ?? viewConfig[channel === 'width' ? 'discreteWidth' : 'discreteHeight']; // get width/height for backwards compatibility
+  const size =
+    (viewConfig as any)[channel] ??
+    viewConfig[channel === 'width' ? 'discreteWidth' : channel === 'height' ? 'discreteHeight' : 'discreteDepth']; // get width/height for backwards compatibility
   return getFirstDefined(size, {step: viewConfig.step});
 }
 

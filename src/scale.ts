@@ -892,8 +892,10 @@ export function channelSupportScaleType(channel: Channel, scaleType: ScaleType, 
   switch (channel) {
     case CHANNEL.X:
     case CHANNEL.Y:
+    case CHANNEL.Z:
     case CHANNEL.XOFFSET:
     case CHANNEL.YOFFSET:
+    case CHANNEL.ZOFFSET:
     case CHANNEL.THETA:
     case CHANNEL.RADIUS:
       if (isContinuousToContinuous(scaleType)) {

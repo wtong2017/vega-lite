@@ -19,7 +19,7 @@ const BASELINED_Y_CHANNEL = {
 };
 
 export function vgAlignedPositionChannel(
-  channel: 'x' | 'y' | 'radius' | 'theta',
+  channel: 'x' | 'y' | 'z' | 'radius' | 'theta',
   markDef: MarkDef<Mark, SignalRef>,
   config: Config<SignalRef>,
   defaultAlign: 'top' | 'middle' = 'middle'

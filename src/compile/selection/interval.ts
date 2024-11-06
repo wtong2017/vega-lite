@@ -304,7 +304,7 @@ function channelSignals(
   const scaleName = stringValue(scaledInterval ? model.scaleName(channel) : model.projectionName());
   const scaled = (str: string) => `scale(${scaleName}, ${str})`;
 
-  const size = model.getSizeSignalRef(channel === X ? 'width' : 'height').signal;
+  const size = model.getSizeSignalRef(channel === X ? 'width' : channel === Y ? 'height' : 'depth').signal;
   const coord = `${channel}(unit)`;
   const von = selCmpt.events.reduce((def: OnEvent[], evt: Stream) => {
     return [

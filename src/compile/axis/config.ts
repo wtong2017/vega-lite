@@ -11,7 +11,7 @@ import {getStyleConfig, signalOrStringValue} from '../common';
 function getAxisConfigFromConfigTypes(
   configTypes: string[],
   config: Config,
-  channel: 'x' | 'y',
+  channel: 'x' | 'y' | 'z',
   orient: string | SignalRef
 ) {
   // TODO: add special casing to add conditional value based on orient signal
@@ -62,7 +62,7 @@ export function getAxisConfigs(
             ? ['axisTemporal']
             : [];
 
-  const axisChannel = channel === 'x' ? 'axisX' : 'axisY';
+  const axisChannel = channel === 'x' ? 'axisX' : channel === 'y' ? 'axisY' : 'axisZ';
   const axisOrient = isSignalRef(orient) ? 'axisOrient' : `axis${titleCase(orient)}`; // axisTop, axisBottom, ...
 
   const vlOnlyConfigTypes = [

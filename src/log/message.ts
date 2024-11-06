@@ -187,7 +187,7 @@ export function droppingColor(type: 'encoding' | 'property', opt: {fill?: boolea
   }.`;
 }
 
-export function relativeBandSizeNotSupported(sizeChannel: 'width' | 'height') {
+export function relativeBandSizeNotSupported(sizeChannel: 'width' | 'height' | 'depth') {
   return `Position range does not support relative band size for ${sizeChannel}.`;
 }
 
@@ -293,8 +293,8 @@ export function scaleTypeNotWorkWithMark(mark: Mark, scaleType: ScaleType) {
   return `Scale type "${scaleType}" does not work with mark "${mark}".`;
 }
 
-export function stepDropped(channel: 'width' | 'height') {
-  return `The step for "${channel}" is dropped because the ${channel === 'width' ? 'x' : 'y'} is continuous.`;
+export function stepDropped(channel: 'width' | 'height' | 'depth') {
+  return `The step for "${channel}" is dropped because the ${channel === 'width' ? 'x' : channel === 'height' ? 'y' : 'z'} is continuous.`;
 }
 
 export function mergeConflictingProperty<T>(

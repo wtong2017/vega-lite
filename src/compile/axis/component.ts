@@ -69,6 +69,7 @@ export class AxisComponent extends Split<AxisComponentProps> {
 export interface AxisComponentIndex {
   x?: AxisComponent[];
   y?: AxisComponent[];
+  z?: AxisComponent[];
 }
 
 export interface AxisInternalIndex {

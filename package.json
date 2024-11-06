@@ -143,7 +143,7 @@
     "yargs": "~18.0.0"
   },
   "peerDependencies": {
-    "vega": "^6.0.0"
+    "vega": "../vega-three/packages/vega"
   },
   "engines": {
     "node": ">=20"

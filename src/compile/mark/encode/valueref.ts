@@ -286,6 +286,8 @@ export function widthHeightValueOrSignalRef(channel: Channel, value: Value | Sig
     return {field: {group: 'width'}};
   } else if (contains(['y', 'y2'], channel) && value === 'height') {
     return {field: {group: 'height'}};
+  } else if (contains(['z', 'z2'], channel) && value === 'depth') {
+    return {field: {group: 'depth'}};
   }
   return signalOrValueRef(value);
 }

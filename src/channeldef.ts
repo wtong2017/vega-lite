@@ -50,6 +50,9 @@ import {
   Y,
   Y2,
   YOFFSET,
+  Z,
+  Z2,
+  ZOFFSET,
 } from './channel.js';
 import {getMarkConfig, getMarkPropOrConfig} from './compile/common.js';
 import {isCustomFormatType} from './compile/format.js';
@@ -389,8 +392,9 @@ export type OffsetDef<F extends Field, T extends Type = StandardType> =
 export interface DatumDef<
   F extends Field = string,
   V extends PrimitiveValue | DateTime | ExprRef | SignalRef = PrimitiveValue | DateTime | ExprRef | SignalRef,
->
-  extends Partial<TypeMixins<Type>>, BandMixins, TitleMixins {
+> extends Partial<TypeMixins<Type>>,
+    BandMixins,
+    TitleMixins {
   /**
    * A constant value in data domain.
    */
@@ -1276,8 +1280,10 @@ export function channelCompatibility(
 
     case X:
     case Y:
+    case Z:
     case XOFFSET:
     case YOFFSET:
+    case ZOFFSET:
     case COLOR:
     case FILL:
     case STROKE:
@@ -1314,6 +1320,7 @@ export function channelCompatibility(
     case RADIUS2:
     case X2:
     case Y2:
+    case Z2:
     case TIME:
       if (type === 'nominal' && !(fieldDef as any)['sort']) {
         return {

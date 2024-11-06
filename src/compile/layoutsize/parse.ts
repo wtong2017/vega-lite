@@ -107,8 +107,8 @@ export function parseUnitLayoutSize(model: UnitModel) {
   }
 }
 
-function defaultUnitSize(model: UnitModel, sizeType: 'width' | 'height'): LayoutSize {
-  const channel = sizeType === 'width' ? 'x' : 'y';
+function defaultUnitSize(model: UnitModel, sizeType: 'width' | 'height' | 'depth'): LayoutSize {
+  const channel = sizeType === 'width' ? 'x' : sizeType === 'height' ? 'y' : 'z';
   const config = model.config;
   const scaleComponent = model.getScaleComponent(channel);
 

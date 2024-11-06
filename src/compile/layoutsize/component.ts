@@ -10,12 +10,22 @@ export interface LayoutSizeIndex {
   height?: LayoutSize;
 
   childHeight?: LayoutSize;
+
+  depth?: LayoutSize;
+
+  childDepth?: LayoutSize;
 }
 
 export type LayoutSizeType = keyof LayoutSizeIndex;
 
 export type LayoutSizeComponent = Split<LayoutSizeIndex>;
 
-export function getSizeTypeFromLayoutSizeType(layoutSizeType: LayoutSizeType): 'width' | 'height' {
-  return layoutSizeType === 'childWidth' ? 'width' : layoutSizeType === 'childHeight' ? 'height' : layoutSizeType;
+export function getSizeTypeFromLayoutSizeType(layoutSizeType: LayoutSizeType): 'width' | 'height' | 'depth' {
+  return layoutSizeType === 'childWidth'
+    ? 'width'
+    : layoutSizeType === 'childHeight'
+      ? 'height'
+      : layoutSizeType === 'childDepth'
+        ? 'depth'
+        : layoutSizeType;
 }

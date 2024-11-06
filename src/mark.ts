@@ -121,8 +121,7 @@ export interface VLOnlyMarkConfig<ES extends ExprRef | SignalRef> extends ColorM
 }
 
 export interface MarkConfig<ES extends ExprRef | SignalRef>
-  extends
-    VLOnlyMarkConfig<ES>,
+  extends VLOnlyMarkConfig<ES>,
     MapExcludeValueRefAndReplaceSignalWith<Omit<VgMarkConfig, 'tooltip' | 'fill' | 'stroke'>, ES> {
   // ========== Overriding Vega ==========
 
@@ -169,6 +168,8 @@ export interface MarkConfig<ES extends ExprRef | SignalRef>
    */
   y?: number | 'height' | ES; // Vega doesn't have 'height'
 
+  z?: number | 'depth' | ES;
+
   /**
    * X2 coordinates for ranged `"area"`, `"bar"`, `"rect"`, and  `"rule"`.
    *
@@ -182,6 +183,8 @@ export interface MarkConfig<ES extends ExprRef | SignalRef>
    * The `value` of this channel can be a number or a string `"height"` for the height of the plot.
    */
   y2?: number | 'height' | ES; // Vega doesn't have 'height'
+
+  z2?: number | 'depth' | ES;
 
   time?: number | ES;
 
@@ -521,7 +524,9 @@ export interface LineOverlayMixins<ES extends ExprRef | SignalRef> {
 }
 
 export interface AreaConfig<ES extends ExprRef | SignalRef>
-  extends MarkConfig<ES>, PointOverlayMixins<ES>, LineOverlayMixins<ES> {}
+  extends MarkConfig<ES>,
+    PointOverlayMixins<ES>,
+    LineOverlayMixins<ES> {}
 
 export interface TickThicknessMixins {
   /**
@@ -580,6 +585,10 @@ export interface MarkDefMixins<ES extends ExprRef | SignalRef> {
    */
   y2Offset?: number | ES;
 
+  zOffset?: number | ES;
+
+  z2Offset?: number | ES;
+
   /**
    * Offset for theta.
    */
@@ -610,15 +619,14 @@ export interface RelativeBandSize {
 
 // Point/Line OverlayMixins are only for area, line, and trail but we don't want to declare multiple types of MarkDef
 export interface MarkDef<M extends string | Mark = Mark, ES extends ExprRef | SignalRef = ExprRef | SignalRef>
-  extends
-    GenericMarkDef<M>,
+  extends GenericMarkDef<M>,
     Omit<
       MarkConfig<ES> &
         AreaConfig<ES> &
         BarConfig<ES> & // always extends RectConfig
         LineConfig<ES> &
         TickConfig<ES>,
-      'startAngle' | 'endAngle' | 'width' | 'height'
+      'startAngle' | 'endAngle' | 'width' | 'height' | 'depth'
     >,
     MarkDefMixins<ES> {
   // Omit startAngle/endAngle since we use theta/theta2 from Vega-Lite schema to avoid confusion
@@ -652,6 +660,8 @@ export interface MarkDef<M extends string | Mark = Mark, ES extends ExprRef | Si
    * - A relative band size definition.  For example, `{band: 0.5}` represents half of the band
    */
   height?: number | ES | RelativeBandSize;
+
+  depth?: number | ES | RelativeBandSize;
 }
 
 const DEFAULT_RECT_BAND_SIZE = 5;
@@ -669,7 +679,9 @@ export const defaultBarConfig: RectConfig<SignalRef> = {
 };
 
 export interface TickConfig<ES extends ExprRef | SignalRef>
-  extends MarkConfig<ES>, TickThicknessMixins, RectConfig<ES> {
+  extends MarkConfig<ES>,
+    TickThicknessMixins,
+    RectConfig<ES> {
   /**
    * The width of the ticks.
    *

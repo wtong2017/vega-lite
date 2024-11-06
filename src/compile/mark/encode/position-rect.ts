@@ -39,7 +39,7 @@ import {getFirstDefined} from '../../../util.js';
 import {Mark} from '../../../mark.js';
 import {OFFSETTED_RECT_END_SUFFIX, OFFSETTED_RECT_START_SUFFIX} from '../../data/timeunit.js';
 
-export function rectPosition(model: UnitModel, channel: 'x' | 'y' | 'theta' | 'radius'): VgEncodeEntry {
+export function rectPosition(model: UnitModel, channel: 'x' | 'y' | 'z' | 'theta' | 'radius'): VgEncodeEntry {
   const {config, encoding, markDef} = model;
   const mark = markDef.type;
 
@@ -63,6 +63,7 @@ export function rectPosition(model: UnitModel, channel: 'x' | 'y' | 'theta' | 'r
     (mark === 'bar' && (channel === 'x' ? orient === 'vertical' : orient === 'horizontal')) ||
     (mark === 'tick' && (channel === 'y' ? orient === 'vertical' : orient === 'horizontal'));
 
+  console.log(channel, channelDef, scaleType);
   // x, x2, and width -- we must specify two of these in all conditions
   if (
     isFieldDef(channelDef) &&
@@ -85,7 +86,7 @@ export function rectPosition(model: UnitModel, channel: 'x' | 'y' | 'theta' | 'r
 }
 
 function defaultSizeRef(
-  sizeChannel: 'width' | 'height',
+  sizeChannel: 'width' | 'height' | 'depth',
   scaleName: string,
   scale: ScaleComponent,
   config: Config<SignalRef>,
@@ -145,8 +146,8 @@ function defaultSizeRef(
  * Output position encoding and its size encoding for continuous, point, and band scales.
  */
 function positionAndSize(
-  fieldDef: Encoding<string>['x' | 'y' | 'theta' | 'radius'],
-  channel: 'x' | 'y' | 'theta' | 'radius',
+  fieldDef: Encoding<string>['x' | 'y' | 'z' | 'theta' | 'radius'],
+  channel: 'x' | 'y' | 'z' | 'theta' | 'radius',
   model: UnitModel,
 ) {
   const {markDef, encoding, config, stack} = model;
@@ -333,8 +334,8 @@ function rectBinPosition({
   model,
 }: {
   fieldDef: TypedFieldDef<string>;
-  fieldDef2?: Encoding<string>['x2' | 'y2'];
-  channel: 'x' | 'y' | 'theta' | 'radius';
+  fieldDef2?: Encoding<string>['x2' | 'y2' | 'z2'];
+  channel: 'x' | 'y' | 'z' | 'theta' | 'radius';
   model: UnitModel;
 }) {
   const {config, markDef, encoding} = model;

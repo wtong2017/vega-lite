@@ -221,6 +221,9 @@ export type VgEncodeChannel =
   | 'y2'
   | 'yc'
   | 'height'
+  | 'z'
+  | 'z2'
+  | 'depth'
   | 'opacity'
   | 'fill'
   | 'fillOpacity'
@@ -341,6 +344,7 @@ const VG_MARK_CONFIG_INDEX: Flag<keyof MarkConfig> = {
   aspect: 1,
   width: 1,
   height: 1,
+  depth: 1,
   url: 1,
   smooth: 1,
 

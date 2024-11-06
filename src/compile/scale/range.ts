@@ -26,6 +26,8 @@ import {
   XOFFSET,
   Y,
   YOFFSET,
+  Z,
+  ZOFFSET,
   TIME,
 } from '../../channel.js';
 import {
@@ -84,7 +86,7 @@ export function parseUnitScaleRange(model: UnitModel) {
   }
 }
 
-function getBinStepSignal(model: UnitModel, channel: 'x' | 'y'): SignalRefWrapper {
+function getBinStepSignal(model: UnitModel, channel: 'x' | 'y' | 'z'): SignalRefWrapper {
   const fieldDef = model.fieldDef(channel);
 
   if (fieldDef?.bin) {
@@ -224,7 +226,7 @@ function parseScheme(scheme: Scheme | SignalRef): RangeScheme {
 }
 
 function fullWidthOrHeightRange(
-  channel: 'x' | 'y',
+  channel: 'x' | 'y' | 'z',
   model: UnitModel,
   scaleType: ScaleType,
   {center}: {center?: boolean} = {},
@@ -265,7 +267,8 @@ function defaultRange(channel: ScaleChannel, model: UnitModel): VgRange {
 
   switch (channel) {
     case X:
-    case Y: {
+    case Y:
+    case Z: {
       // If there is no explicit width/height for discrete x/y scales
       if (util.contains(['point', 'band'], scaleType)) {
         const positionSize = getDiscretePositionSize(channel, size, config.view);
@@ -280,6 +283,7 @@ function defaultRange(channel: ScaleChannel, model: UnitModel): VgRange {
 
     case XOFFSET:
     case YOFFSET:
+    case ZOFFSET:
       return getOffsetRange(channel, model, scaleType);
 
     case SIZE: {
@@ -451,11 +455,11 @@ function getOffsetRange(channel: string, model: UnitModel, offsetScaleType: Scal
 }
 
 function getDiscretePositionSize(
-  channel: 'x' | 'y',
+  channel: 'x' | 'y' | 'z',
   size: LayoutSizeMixins,
   viewConfig: ViewConfig<SignalRef>,
 ): Step | number | 'container' {
-  const sizeChannel = channel === X ? 'width' : 'height';
+  const sizeChannel = channel === X ? 'width' : channel === Y ? 'height' : 'depth';
   const sizeValue = size[sizeChannel];
   if (sizeValue !== undefined) {
     return sizeValue;

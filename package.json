@@ -135,7 +135,11 @@
     "yargs": "~17.7.2"
   },
   "peerDependencies": {
-    "vega": "../vega-three/packages/vega"
+    "vega": "^5.24.0"
+  },
+  "resolutions": {
+    "vega": "../vega-three/packages/vega",
+    "vega-typings": "../vega-three/packages/vega-typings"
   },
   "engines": {
     "node": ">=18"

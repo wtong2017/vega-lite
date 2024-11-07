@@ -18,6 +18,12 @@ const BASELINED_Y_CHANNEL = {
   bottom: 'y2'
 };
 
+const Z_CHANNEL = {
+  front: 'z2',
+  middle: 'zc',
+  back: 'z'
+};
+
 export function vgAlignedPositionChannel(
   channel: 'x' | 'y' | 'z' | 'radius' | 'theta',
   markDef: MarkDef<Mark, SignalRef>,
@@ -42,7 +48,9 @@ export function vgAlignedPositionChannel(
   // FIXME: remove as any
   if (channel === 'x') {
     return (ALIGNED_X_CHANNEL as any)[alignExcludingSignal || (defaultAlign === 'top' ? 'left' : 'center')];
-  } else {
+  } else if (channel === 'y') {
     return (BASELINED_Y_CHANNEL as any)[alignExcludingSignal || defaultAlign];
+  } else {
+    return (Z_CHANNEL as any)[alignExcludingSignal || defaultAlign === 'top' ? 'back' : 'middle'];
   }
 }

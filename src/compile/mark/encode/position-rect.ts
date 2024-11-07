@@ -56,7 +56,6 @@ export function rectPosition(model: UnitModel, channel: 'x' | 'y' | 'z' | 'theta
     (mark === 'bar' && (channel === 'x' ? orient === 'vertical' : orient === 'horizontal')) ||
     (mark === 'tick' && (channel === 'y' ? orient === 'vertical' : orient === 'horizontal'));
 
-  console.log(channel, channelDef, scaleType);
   // x, x2, and width -- we must specify two of these in all conditions
   if (
     isFieldDef(channelDef) &&
@@ -214,7 +213,7 @@ function positionAndSize(
       : 'middle';
 
   const vgChannel = vgAlignedPositionChannel(channel, markDef, config, defaultBandAlign);
-  const center = vgChannel === 'xc' || vgChannel === 'yc';
+  const center = vgChannel === 'xc' || vgChannel === 'yc' || vgChannel === 'zc';
   const {offset, offsetType} = positionOffset({channel, markDef, encoding, model, bandPosition: center ? 0.5 : 0});
 
   const posRef = ref.midPointRefWithPositionInvalidTest({

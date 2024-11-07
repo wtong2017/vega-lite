@@ -302,6 +302,8 @@ export function getSecondaryRangeChannel<C extends Channel>(channel: C): Seconda
       return X2 as SecondaryChannelOf<C>;
     case Y:
       return Y2 as SecondaryChannelOf<C>;
+    case Z:
+      return Z2 as SecondaryChannelOf<C>;
     case LATITUDE:
       return LATITUDE2 as SecondaryChannelOf<C>;
     case LONGITUDE:

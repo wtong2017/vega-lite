@@ -48,13 +48,13 @@ export function isStackOffset(s: string): s is StackOffset {
 
 export interface StackProperties {
   /** Dimension axis of the stack. */
-  groupbyChannels: ('x' | 'y' | 'theta' | 'radius' | 'xOffset' | 'yOffset')[];
+  groupbyChannels: ('x' | 'y' | 'z' | 'theta' | 'radius' | 'xOffset' | 'yOffset' | 'zOffset')[];
 
   /** Field for groupbyChannel. */
   groupbyFields: Set<FieldName>;
 
   /** Measure axis of the stack. */
-  fieldChannel: 'x' | 'y' | 'theta' | 'radius';
+  fieldChannel: 'x' | 'y' | 'z' | 'theta' | 'radius';
 
   /** Stack-by fields e.g., color, detail */
   stackBy: {
@@ -132,16 +132,18 @@ function potentialStackedChannel(
   return undefined;
 }
 
-function getDimensionChannel(channel: 'x' | 'y' | 'theta' | 'radius') {
+function getDimensionChannels(channel: 'x' | 'y' | 'z' | 'theta' | 'radius'): ('x' | 'y' | 'z' | 'theta' | 'radius')[] {
   switch (channel) {
     case 'x':
-      return 'y';
+      return ['y'];
     case 'y':
-      return 'x';
+      return ['x', 'z'];
     case 'theta':
-      return 'radius';
+      return ['radius'];
     case 'radius':
-      return 'theta';
+      return ['theta'];
+    case 'z':
+      return ['y'];
   }
 }
 
@@ -169,32 +171,35 @@ export function stack(m: Mark | MarkDef, encoding: Encoding<string>): StackPrope
   const stackedFieldDef = encoding[fieldChannel] as PositionFieldDef<string> | PositionDatumDef<string>;
   const stackedField = isFieldDef(stackedFieldDef) ? vgField(stackedFieldDef, {}) : undefined;
 
-  const dimensionChannel: 'x' | 'y' | 'theta' | 'radius' = getDimensionChannel(fieldChannel);
+  const dimensionChannels = getDimensionChannels(fieldChannel);
   const groupbyChannels: StackProperties['groupbyChannels'] = [];
   const groupbyFields: Set<FieldName> = new Set();
 
-  if (encoding[dimensionChannel]) {
-    const dimensionDef = encoding[dimensionChannel];
-    const dimensionField = isFieldDef(dimensionDef) ? vgField(dimensionDef, {}) : undefined;
+  for (const dimensionChannel of dimensionChannels) {
+    if (encoding[dimensionChannel]) {
+      const dimensionDef = encoding[dimensionChannel];
+      const dimensionField = isFieldDef(dimensionDef) ? vgField(dimensionDef, {}) : undefined;
 
-    if (dimensionField && dimensionField !== stackedField) {
-      // avoid grouping by the stacked field
-      groupbyChannels.push(dimensionChannel);
-      groupbyFields.add(dimensionField);
+      if (dimensionField && dimensionField !== stackedField) {
+        // avoid grouping by the stacked field
+        groupbyChannels.push(dimensionChannel);
+        groupbyFields.add(dimensionField);
+      }
     }
+
+    const dimensionOffsetChannel =
+      dimensionChannel === 'x' ? 'xOffset' : dimensionChannel === 'y' ? 'yOffset' : 'zOffset';
+    const dimensionOffsetDef = encoding[dimensionOffsetChannel];
+    const dimensionOffsetField = isFieldDef(dimensionOffsetDef) ? vgField(dimensionOffsetDef, {}) : undefined;
+
+    if (dimensionOffsetField && dimensionOffsetField !== stackedField) {
+      // avoid grouping by the stacked field
+      groupbyChannels.push(dimensionOffsetChannel);
+      groupbyFields.add(dimensionOffsetField);
+    }
+
+    // If the dimension has offset, don't stack anymore
   }
-
-  const dimensionOffsetChannel = dimensionChannel === 'x' ? 'xOffset' : 'yOffset';
-  const dimensionOffsetDef = encoding[dimensionOffsetChannel];
-  const dimensionOffsetField = isFieldDef(dimensionOffsetDef) ? vgField(dimensionOffsetDef, {}) : undefined;
-
-  if (dimensionOffsetField && dimensionOffsetField !== stackedField) {
-    // avoid grouping by the stacked field
-    groupbyChannels.push(dimensionOffsetChannel);
-    groupbyFields.add(dimensionOffsetField);
-  }
-
-  // If the dimension has offset, don't stack anymore
 
   // Should have grouping level of detail that is different from the dimension field
   const stackBy = NONPOSITION_CHANNELS.reduce((sc, channel) => {
